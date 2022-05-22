@@ -4,21 +4,13 @@ import (
 	"errors"
 	"fmt"
 	"strings"
+
+	"github.com/cheveuxdelin/cipher/utils"
 )
 
 type code struct {
 	char byte
 	code string
-}
-
-func toUpper(b byte) byte {
-	if b >= 'a' && b <= 'z' {
-		return b - ('a' - 'A')
-	}
-	return b
-}
-func isASCII(b byte) bool {
-	return b >= ' ' && b <= '~'
 }
 
 var codes []code = []code{
@@ -79,7 +71,7 @@ var codes []code = []code{
 func Encode(s string) (string, error) {
 	// checking if s is not empty
 	if len(s) == 0 {
-		return "", errors.New("invalid string")
+		return "", errors.New("empty string")
 	}
 
 	// creating map
@@ -90,7 +82,6 @@ func Encode(s string) (string, error) {
 
 	// builder variable
 	var rtn strings.Builder
-
 	s = strings.TrimSpace(s)
 
 	if len(s) == 0 {
@@ -98,9 +89,8 @@ func Encode(s string) (string, error) {
 	}
 
 	for i := 0; i < len(s)-1; i++ {
-
 		// checking if its ASCII
-		if !isASCII(s[i]) {
+		if !utils.IsASCIIPrintable(s[i]) {
 			return "", fmt.Errorf("char not ASCII: %c", s[i])
 		}
 
@@ -108,7 +98,7 @@ func Encode(s string) (string, error) {
 			rtn.WriteString("/ ")
 		} else {
 			// getting char from d
-			value, ok := d[toUpper(s[i])]
+			value, ok := d[utils.ToUpper(s[i])]
 
 			if ok {
 				rtn.WriteString(value)
@@ -117,7 +107,7 @@ func Encode(s string) (string, error) {
 		}
 	}
 
-	value, ok := d[toUpper(s[len(s)-1])]
+	value, ok := d[utils.ToUpper(s[len(s)-1])]
 	if ok {
 		rtn.WriteString(value)
 	}

@@ -1,146 +1,98 @@
 package main
 
 import (
-	"errors"
-	"fmt"
-	"log"
-	"os"
-	"strconv"
+	"net/http"
 
-	"github.com/cheveuxdelin/cipher/caesar"
+	"github.com/cheveuxdelin/cipher/atbash"
 	"github.com/cheveuxdelin/cipher/morse"
-	"github.com/urfave/cli/v2"
+	"github.com/gin-gonic/gin"
 )
 
-func encodeMorse(c *cli.Context) error {
+type atbashJSON struct {
+	Text string `json:"text" binding:"required"`
+}
+type morseJSON struct {
+	Text string
+}
+type caesarJSON struct {
+	Text        string
+	N           byte
+	OnlyLetters bool
+}
 
-	if c.Args().Len() == 0 {
-		return errors.New("no string provided")
+func atbashHandler(c *gin.Context) {
+	var action string = c.Param("action")
+	if action == "" {
+		c.String(http.StatusBadRequest, "error")
+		return
 	}
 
-	value, error := morse.Encode(c.Args().First())
+	var json atbashJSON
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.String(http.StatusBadRequest, "error")
+		return
+	}
 
-	if error == nil {
-		fmt.Println(value)
+	if action == "encode" {
+		result, err := atbash.Encode(json.Text)
+		if err != nil {
+			c.String(400, "error")
+			return
+		}
+		c.String(200, result)
+	} else if action == "decode" {
+		result, err := atbash.Encode(json.Text)
+		if err != nil {
+			c.String(400, "error")
+			return
+		}
+		c.String(200, result)
 	} else {
-		return error
+		c.String(400, "error")
+		return
 	}
-
-	return nil
 }
 
-func decodeMorse(c *cli.Context) error {
-
-	if c.Args().Len() == 0 {
-		return errors.New("no text provided")
+func morseHandler(c *gin.Context) {
+	var action string = c.Param("action")
+	if action == "" {
+		c.String(http.StatusBadRequest, "error")
+		return
 	}
 
-	value, error := morse.Decode(c.Args().First())
+	var json morseJSON
+	if err := c.ShouldBindJSON(&json); err != nil {
+		c.String(http.StatusBadRequest, "error")
+		return
+	}
 
-	if error == nil {
-		fmt.Println(value)
+	if action == "encode" {
+		result, err := morse.Encode(json.Text)
+		if err != nil {
+			c.String(400, "error")
+			return
+		}
+		c.String(200, result)
+	} else if action == "decode" {
+		result, err := morse.Encode(json.Text)
+		if err != nil {
+			c.String(400, "error")
+			return
+		}
+		c.String(200, result)
 	} else {
-		return error
+		c.String(400, "error")
+		return
 	}
-
-	return nil
-}
-
-func encodeCaesar(c *cli.Context) error {
-
-	if c.NArg() == 0 {
-		return errors.New("no message provided")
-	} else if c.NArg() == 1 {
-		return errors.New("incomplete arguments")
-	}
-
-	var message string = c.Args().First()
-	n, error := strconv.Atoi(c.Args().Get(1))
-
-	if error != nil {
-		return error
-	}
-
-	fmt.Println(caesar.Encode(message, byte(n), c.Bool("onlyletters")))
-
-	return nil
-}
-
-func decodeCaesar(c *cli.Context) error {
-	if c.NArg() == 0 {
-		return errors.New("no message provided")
-	} else if c.NArg() == 1 {
-		return errors.New("incomplete arguments")
-	}
-
-	var message string = c.Args().First()
-	n, error := strconv.Atoi(c.Args().Get(1))
-
-	if error != nil {
-		return error
-	}
-
-	fmt.Println(caesar.Decode(message, byte(n), c.Bool("onlyletters")))
-
-	return nil
 }
 
 func main() {
 
-	app := &cli.App{
-		Name:  "cipher",
-		Usage: "CLI App to encode and decode in different encoding systems :).",
-		Commands: []*cli.Command{
-			{
-				Name:    "encode",
-				Aliases: []string{"e"},
-				Usage:   "Encodes incoming message",
-				Subcommands: []*cli.Command{
-					// morse
-					{
-						Name:    "morse",
-						Aliases: []string{"m"},
-						Action:  encodeMorse,
-					},
-					// caesar
-					{
-						Name:    "caesar",
-						Aliases: []string{"c"},
-						Action:  encodeCaesar,
-						Flags: []cli.Flag{
-							&cli.BoolFlag{
-								Name:    "onlyletters",
-								Aliases: []string{"o"},
-								Usage:   "encode only letters from `MESSAGE`",
-							},
-						},
-					},
-				},
-			},
-			{
-				Name:    "decode",
-				Aliases: []string{"d"},
-				Usage:   "Decodes incoming message",
-				Subcommands: []*cli.Command{
-					// morse
-					{
-						Name:    "morse",
-						Aliases: []string{},
-						Action:  decodeMorse,
-					},
-					// morse
-					{
-						Name:    "caesar",
-						Aliases: []string{},
-						Action:  decodeCaesar,
-					},
-				},
-			},
-		},
-	}
+	r := gin.Default()
 
-	err := app.Run(os.Args)
-	if err != nil {
-		log.Fatal(err)
-	}
+	r.POST("/atbash/:action", atbashHandler)
+	r.POST("/morse/:action", atbashHandler)
+
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+
 }
