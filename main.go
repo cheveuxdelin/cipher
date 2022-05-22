@@ -88,7 +88,7 @@ func decodeCaesar(c *cli.Context) error {
 func main() {
 
 	app := &cli.App{
-		Name:  "cypher",
+		Name:  "cipher",
 		Usage: "CLI App to encode and decode in different encoding systems :).",
 		Commands: []*cli.Command{
 			{
