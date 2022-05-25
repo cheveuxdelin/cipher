@@ -1,8 +1,11 @@
 # [CipherAPI](https://cipher-e7737.web.app) &middot; [![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/facebook/react/blob/main/LICENSE)   [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](https://reactjs.org/docs/how-to-contribute.html#your-first-pull-request)
 
-CipherAPI is an open API for encoding and decoding text using post requests.
+CipherAPI is an open API for encoding and decoding text using post requests :sheep: :honeybee: :star2:.
 
-## Methods
+Ciphers are methods to encode information with the purpose secure data or the message. They have been used since historical times, and they have evolved now to modern cryptography that is used everywhere for safe applications and data handling.
+
+![Zodiac cipher](https://media.threatpost.com/wp-content/uploads/sites/103/2020/12/17122725/Zodiac-e1608226062664.jpg)
+## Index
 
 * [Morse](#morse)
 * [Usage](#usage)
@@ -103,3 +106,4 @@ All methods support both actions encode and decode.
 | Caesar | text :exclamation:, n :exclamation:, onlyLetters  |
 | Atbash | text :exclamation: |
 
+*New methods are expected to be added soon, so make sure to star the project and keep an eye on it* :seedling: :sunny:
