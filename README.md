@@ -4,6 +4,8 @@ CipherAPI is an open API for encoding and decoding text using post requests :she
 
 Ciphers are methods to encode information with the purpose secure data or the message. They have been used since historical times, and they have evolved now to modern cryptography that is used everywhere for safe applications and data handling.
 
+Useful for cases where you need to encode or decode data (more advanced methods coming soon), or for teaching purposes.
+
 ![Zodiac cipher](https://media.threatpost.com/wp-content/uploads/sites/103/2020/12/17122725/Zodiac-e1608226062664.jpg)
 ## Index
 
