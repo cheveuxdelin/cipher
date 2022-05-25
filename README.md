@@ -93,11 +93,13 @@ And thats it! you can now make requests on port :8080, or if you can change the 
 
 ## API
 
-All methods support both actions encode and decode:
+All methods support both actions encode and decode.
 
-```
-Method  | Parameters
-------------- | ------------- 
-Morse | text (required) .-. .-.. -..
-Caesar | text (required), n (required), onlyLetters
-```
+:exclamation: marked as required:
+
+| Method | Parameters |
+| --- | --- |
+| Morse | text :exclamation: |
+| Caesar | text :exclamation:, n :exclamation:, onlyLetters  |
+| Atbash | text :exclamation: |
+
