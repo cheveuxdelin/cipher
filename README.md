@@ -7,10 +7,44 @@ CipherAPI is an open API for encoding and decoding text using post requests.
 * [Morse](#morse)
 * [Usage](#usage)
 * [Installation](#installation)
+* [API](#API)
   
 ## Usage
 
+Cipher API can be used three ways:
 
+### Using Post Requests
+
+The simplest way to try it out and the way it's meant to be used. As a public API you can do POST requests:
+
+```bash
+curl -X POST https://ciphertapi.herokuapp.com/encode/morse -H Content-Type:application/json -d '{"text":"Hello world"}'
+```
+
+```js
+const response = await fetch("https://ciphertapi.herokuapp.com/encode/morse", {
+    method: "POST",
+    headers: { "content-type": "application/json"},
+    body: JSON.stringify({
+        text: "Hello world"
+    }),
+})
+const data = await response.text();
+
+if (!response.ok) {
+    alert(data);
+} else {
+    console.log(data);
+}
+```
+
+### Website
+
+Provides a full deployed [website](https://cipher-e7737.web.app) so you can try all methods for encoding! It saves your historical encodings with user sessions :)
+
+### Locally
+
+If you wish try it on your own and modify it freely, please refer to [installation](#installation).
 
 ```go
 package main
@@ -41,6 +75,8 @@ func main() {
 
 ## Installation
 
+Make sure you have [Go](https://go.dev/doc/install) installed.
+
 If you do wish to run the server locally, run this command to clone the project
 
 ```bash
@@ -51,4 +87,17 @@ And then run this command on the cloned project to start the server in your loca
 
 ```bash
 go run main.go
+```
+
+And thats it! you can now make requests on port :8080, or if you can change the port if you need to
+
+## API
+
+All methods support both actions encode and decode:
+
+```
+Method  | Parameters
+------------- | ------------- 
+Morse | text (required) .-. .-.. -..
+Caesar | text (required), n (required), onlyLetters
 ```
