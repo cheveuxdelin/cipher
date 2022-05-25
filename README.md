@@ -107,3 +107,5 @@ All methods support both actions encode and decode.
 | Atbash | text :exclamation: |
 
 *New methods are expected to be added soon, so make sure to star the project and keep an eye on it* :seedling: :sunny:
+
+![gif](https://media.giphy.com/media/FtLZ05FBnC48uYGzuO/giphy-downsized-large.gif)
