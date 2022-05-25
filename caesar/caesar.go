@@ -1,16 +1,23 @@
 package caesar
 
+import (
+	"errors"
+
+	"github.com/cheveuxdelin/cipher/utils"
+)
+
 const N_LETTERS byte = 26
 const N_ASCII_PRINTABLE = 224
 
 //Encodes single letter giving n offset
 func encodeLetter(b byte, n byte) byte {
 	// converting to lowercase if needed
-	if b >= 'A' && b <= 'Z' {
-		b += 'a' - 'A'
+	if (b >= 'A' && b <= 'Z') || (b >= 'a' && b <= 'z') {
+		b = utils.ToUpper(b)
+		return byte((b+n-'a')%N_LETTERS + 'a')
+	} else {
+		return b
 	}
-
-	return byte((b+n-'a')%N_LETTERS + 'a')
 }
 
 func encodeChar(b byte, n byte) byte {
@@ -23,10 +30,18 @@ func Encode(s string, n byte, onlyLetters bool) (string, error) {
 
 	if onlyLetters {
 		for i := range encodedMessage {
+			if !utils.IsASCIIPrintable(s[i]) {
+				return "", errors.New("not ASCII")
+			}
+
 			encodedMessage[i] = encodeLetter(s[i], n)
 		}
 	} else {
 		for i := range encodedMessage {
+			if !utils.IsASCIIPrintable(s[i]) {
+				return "", errors.New("not ASCII")
+			}
+
 			encodedMessage[i] = encodeChar(s[i], n)
 		}
 	}
@@ -40,10 +55,18 @@ func Decode(s string, n byte, onlyLetters bool) (string, error) {
 
 	if onlyLetters {
 		for i := range encodedMessage {
+			if !utils.IsASCIIPrintable(s[i]) {
+				return "", errors.New("not ASCII")
+			}
+
 			encodedMessage[i] = encodeLetter(s[i], -n)
 		}
 	} else {
 		for i := range encodedMessage {
+			if !utils.IsASCIIPrintable(s[i]) {
+				return "", errors.New("not ASCII")
+			}
+
 			encodedMessage[i] = encodeChar(s[i], -n)
 		}
 	}

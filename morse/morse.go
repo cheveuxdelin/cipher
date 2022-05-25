@@ -118,7 +118,7 @@ func Encode(s string) (string, error) {
 func Decode(s string) (string, error) {
 
 	if len(s) == 0 {
-		return "", errors.New("invalid string")
+		return "", errors.New("empty string")
 	}
 
 	var d map[string]byte = make(map[string]byte, len(codes))

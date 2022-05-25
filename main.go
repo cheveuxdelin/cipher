@@ -48,7 +48,7 @@ func atbashHandler(c *gin.Context) {
 		}
 		c.String(200, result)
 	} else if action == "decode" {
-		result, err := atbash.Encode(json.Text)
+		result, err := atbash.Decode(json.Text)
 		if err != nil {
 			c.String(400, err.Error())
 			return
@@ -127,14 +127,10 @@ func caesarHandler(c *gin.Context) {
 }
 
 func main() {
-
 	r := gin.Default()
 	r.Use(cors.Default())
-
 	r.POST("/atbash/:action", atbashHandler)
 	r.POST("/morse/:action", morseHandler)
 	r.POST("/caesar/:action", caesarHandler)
-
 	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
-
 }
