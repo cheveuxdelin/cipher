@@ -8,5 +8,5 @@ func TestMorseEncoding(t *testing.T) {
 }
 
 func TestMorseDecoding(t *testing.T) {
-
+	t.Fail()
 }
