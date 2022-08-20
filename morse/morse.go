@@ -1,16 +1,20 @@
 package morse
 
 import (
-	"errors"
 	"fmt"
 	"strings"
 
+	"github.com/cheveuxdelin/cipher/errors"
 	"github.com/cheveuxdelin/cipher/utils"
 )
 
 type code struct {
 	char byte
 	code string
+}
+
+type MorseJSON struct {
+	Text string `json:"text" binding:"required"`
 }
 
 var codes []code = []code{
@@ -69,9 +73,8 @@ var codes []code = []code{
 }
 
 func Encode(s string) (string, error) {
-	// checking if s is not empty
-	if len(s) == 0 {
-		return "", errors.New("empty string")
+	if err := utils.ValidateString(&s); err != nil {
+		return "", err
 	}
 
 	// creating map
@@ -82,18 +85,8 @@ func Encode(s string) (string, error) {
 
 	// builder variable
 	var rtn strings.Builder
-	s = strings.TrimSpace(s)
-
-	if len(s) == 0 {
-		return "", errors.New("string containing only spaces")
-	}
 
 	for i := 0; i < len(s)-1; i++ {
-		// checking if its ASCII
-		if !utils.IsASCIIPrintable(s[i]) {
-			return "", fmt.Errorf("char not ASCII: %c", s[i])
-		}
-
 		if s[i] == ' ' {
 			rtn.WriteString("/ ")
 		} else {
@@ -118,7 +111,7 @@ func Encode(s string) (string, error) {
 func Decode(s string) (string, error) {
 
 	if len(s) == 0 {
-		return "", errors.New("empty string")
+		return "", errors.ErrEmptyString
 	}
 
 	var d map[string]byte = make(map[string]byte, len(codes))

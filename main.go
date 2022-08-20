@@ -10,18 +10,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type atbashJSON struct {
-	Text string `json:"text" binding:"required"`
-}
-type morseJSON struct {
-	Text string `json:"text" binding:"required"`
-}
-type caesarJSON struct {
-	Text        string `json:"text" binding:"required"`
-	N           byte   `json:"n" binding:"required"`
-	OnlyLetters bool   `json:"only_letters"`
-}
-
 const (
 	NO_ACTION_SELECTED string = "No action Selected (encode/decode)"
 	INVALID_ACTION     string = "Invalid action (encode/decode)"
@@ -34,7 +22,7 @@ func atbashHandler(c *gin.Context) {
 		return
 	}
 
-	var json atbashJSON
+	var json atbash.AtbashJSON
 	if err := c.ShouldBindJSON(&json); err != nil {
 		c.String(http.StatusBadRequest, err.Error())
 		return
@@ -48,7 +36,7 @@ func atbashHandler(c *gin.Context) {
 		}
 		c.String(200, result)
 	} else if action == "decode" {
-		result, err := atbash.Decode(json.Text)
+		result, err := atbash.Encode(json.Text)
 		if err != nil {
 			c.String(400, err.Error())
 			return
@@ -67,7 +55,7 @@ func morseHandler(c *gin.Context) {
 		return
 	}
 
-	var json morseJSON
+	var json morse.MorseJSON
 	if err := c.ShouldBindJSON(&json); err != nil {
 		c.String(http.StatusBadRequest, "error")
 		return
@@ -100,7 +88,7 @@ func caesarHandler(c *gin.Context) {
 		return
 	}
 
-	var json caesarJSON
+	var json caesar.CaesarJSON
 	if err := c.ShouldBindJSON(&json); err != nil {
 		c.String(http.StatusBadRequest, err.Error())
 		return

@@ -1,15 +1,20 @@
 package caesar
 
 import (
-	"errors"
-
+	"github.com/cheveuxdelin/cipher/errors"
 	"github.com/cheveuxdelin/cipher/utils"
 )
 
 const N_LETTERS byte = 26
 const N_ASCII_PRINTABLE = 224
 
-//Encodes single letter giving n offset
+type CaesarJSON struct {
+	Text        string `json:"text" binding:"required"`
+	N           byte   `json:"n" binding:"required"`
+	OnlyLetters bool   `json:"only_letters"`
+}
+
+// Encodes single letter giving n offset
 func encodeLetter(b byte, n byte) byte {
 	// converting to lowercase if needed
 	if (b >= 'A' && b <= 'Z') || (b >= 'a' && b <= 'z') {
@@ -31,7 +36,7 @@ func Encode(s string, n byte, onlyLetters bool) (string, error) {
 	if onlyLetters {
 		for i := range encodedMessage {
 			if !utils.IsASCIIPrintable(s[i]) {
-				return "", errors.New("not ASCII")
+				return "", errors.ErrStringNotASCII
 			}
 
 			encodedMessage[i] = encodeLetter(s[i], n)
@@ -39,7 +44,7 @@ func Encode(s string, n byte, onlyLetters bool) (string, error) {
 	} else {
 		for i := range encodedMessage {
 			if !utils.IsASCIIPrintable(s[i]) {
-				return "", errors.New("not ASCII")
+				return "", errors.ErrStringNotASCII
 			}
 
 			encodedMessage[i] = encodeChar(s[i], n)
@@ -56,7 +61,7 @@ func Decode(s string, n byte, onlyLetters bool) (string, error) {
 	if onlyLetters {
 		for i := range encodedMessage {
 			if !utils.IsASCIIPrintable(s[i]) {
-				return "", errors.New("not ASCII")
+				return "", errors.ErrStringNotASCII
 			}
 
 			encodedMessage[i] = encodeLetter(s[i], -n)
@@ -64,7 +69,7 @@ func Decode(s string, n byte, onlyLetters bool) (string, error) {
 	} else {
 		for i := range encodedMessage {
 			if !utils.IsASCIIPrintable(s[i]) {
-				return "", errors.New("not ASCII")
+				return "", errors.ErrStringNotASCII
 			}
 
 			encodedMessage[i] = encodeChar(s[i], -n)
